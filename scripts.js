@@ -30,7 +30,6 @@ $UPLOAD_BUTTON.addEventListener('click', () => {
           LINKS.push(baseUrl.href);
      }
      for (let i = 0; i < LINKS.length; i++) {
-          console.log($LINKS_LIST);
           let anchor = document.createElement('a'); 
           anchor.setAttribute('target', '_blank');
           anchor.innerHTML = `Link for number ${INTERNATIONAL_NUMBERS[i]} <br>`
