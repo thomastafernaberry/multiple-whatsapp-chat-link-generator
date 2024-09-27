@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Whatsapp multiple chat generator</title>
+</head>
+<body>
+     <form action="" method="get">
+          <h2>Enter your code area</h2>
+          <span>+ </span><input type="number" name="international-code" id="international-code" style="height: 2rem; width: 3rem;"><br>
+          <h2>Enter numbers</h2>
+          <h3>Each one must be spaced by a line break or space</h3>
+          <textarea name="local-numbers" id="local-numbers"></textarea><br>
+          <h2>Enter message</h2>
+          <textarea name="message" id="message"></textarea>
+          <button type="button" id="upload-button">Generate links</button>
+          <p>If you want to use Whatsapp Web it is strongly recommended that you disable Javascript for "api.whatsapp.com". Else it will prompt you if you want to open Whatsapp Desktop every time you open a new api.whatsapp.com link.</p>
+          <p>If you want to use Whatsapp Desktop you can mark the check in the prompt to always allow "api.whatsapp.com" to open your desktop app every time you open a new api.whatsapp.com link.</p>
+     </form>
+     <ul id="links-list"></ul>
+     <script src="/scripts.js"></script>
+</body>
+</html>
