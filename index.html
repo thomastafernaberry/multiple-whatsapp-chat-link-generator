@@ -3,23 +3,57 @@
 <head>
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Whatsapp multiple chat generator</title>
+     <title>Multiple Whatsapp Chat Link Generator</title>
 </head>
 <body>
-     <form action="" method="get">
-          <h2>Enter your code area</h2>
-          <span>+ </span><input type="number" name="international-code" id="international-code" style="height: 2rem; width: 3rem;"><br>
-          <h2>Enter numbers</h2>
-          <h3>Each one must be spaced by a line break or space</h3>
-          <textarea name="local-numbers" id="local-numbers"></textarea><br>
-          <h2>Enter message</h2>
-          <textarea name="message" id="message"></textarea>
-          <button type="button" id="upload-button">Generate links</button>
-          <p>If you want to use Whatsapp Web it is strongly recommended that you disable Javascript for "api.whatsapp.com". Else it will prompt you if you want to open Whatsapp Desktop every time you open a new api.whatsapp.com link.</p>
-          <p>If you want to use Whatsapp Desktop you can mark the check in the prompt to always allow "api.whatsapp.com" to open your desktop app every time you open a new api.whatsapp.com link.</p>
-     </form>
-     <ul id="links-list"></ul>
-     
+
+     <section>
+          <h3>How to use</h3>
+          <ol>
+               <li>Fill form.</li>
+               <li>Click on "Generate links" button.</li>
+               <li>Click on "Open all links" button.</li>
+               <p>* In order to open all links you must enable pop-ups for this site.</p>
+               <p>* It's <b>strongly</b> recommended to read the section below.</p>
+          </ol>
+          <h3>Ideal workflow and useful keyboard shortcuts</h3>
+          <ol>
+               <li>Once you click on the button "Open all links", go to the first tab created (the first tab from left to right).</li>
+               <li>Whatsapp Web will open with the conversation and the message set.</li>
+               <li>Send the message pressing <b>Enter</b> in your keyboard.</li>
+               <li>When your message is sent (when the message status icon is one tick) press <b>CTRL + W</b> to close currently focused browser tab (Whatsapp Web).</li>
+               <li>Your focus will change to the tab on the right (the next waiting room). Repeat from step 3.</li>
+               <p>* No mouse is required at all, just your keyboard.</p>
+               <p>* If you know programming, you can automate the process further with PyAutoGUI (Python) or Tampermonkey (Javascript).</p>
+          </ol>
+     </section>
+
+     <section>
+          <form method="get">
+               <h3>Enter international code area</h3>
+               <span>+</span><input type="number" name="international-code" id="international-code" style="height: 2rem; width: 3rem; margin-left: 1rem;">
+               <h3>Enter local phone numbers</h3>
+               <h4>Each one must be spaced by a line break or space</h4>
+               <textarea name="local-numbers" id="local-numbers"></textarea>
+               <h3>Enter message</h3>
+               <textarea name="message" id="message"></textarea>
+          </form>
+          <div>
+               <button type="button" id="generate-links-button">
+                    Generate links
+               </button>
+               <button type="button" onclick="openAllDocumentLinks()">
+                    Open all links
+               </button> 
+               <span>*Allow pop-ups for this site to open multiple links</span>
+               <button type="button" onclick="removeAllChildrenFromElement('links-section')">
+                    Remove all links
+               </button>
+          </div>
+     </section>
+
+     <section id="links-section"></section>
+
      <script src="/scripts.js"></script>
 </body>
 </html>

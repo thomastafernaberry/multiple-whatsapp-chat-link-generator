@@ -1,39 +1,82 @@
-const $USER_NUMBERS = document.getElementById('local-numbers');
-const $UPLOAD_BUTTON = document.getElementById('upload-button');
-const $INTERNATIONAL_CODE = document.getElementById('international-code');
-const $MESSAGE = document.getElementById('message');
-const $LINKS_LIST = document.getElementById('links-list');
+function getLocalPhoneNumbersArray(localPhoneNumbersTextarea) {
+     const TEXTAREA_VALUES = localPhoneNumbersTextarea.value;
+     const LOCAL_NUMBERS_ARRAY = [];
+     let currentLocalNumber = '';
+     for (const CHAR of TEXTAREA_VALUES) {
+          if (CHAR === '\n' || CHAR === ' ' && currentLocalNumber) {
+               LOCAL_NUMBERS_ARRAY.push(currentLocalNumber);
+               currentLocalNumber = '';
+          } else if (CHAR) {
+               currentLocalNumber += CHAR;
+          }
+     }
+     if (currentLocalNumber) {
+          LOCAL_NUMBERS_ARRAY.push(currentLocalNumber);
+     }
+     return LOCAL_NUMBERS_ARRAY;
+}
 
-$UPLOAD_BUTTON.addEventListener('click', () => {
-     const LOCAL_NUMBERS = [];
-     let currentNumber = '';
-     for (let i = 0; i <= $USER_NUMBERS.value.length; i++) {
-          if ($USER_NUMBERS.value[i] === '\n' || $USER_NUMBERS.value[i] === ' ' && currentNumber !== '') {
-               LOCAL_NUMBERS.push(currentNumber);
-               currentNumber = '';
-          } else if ($USER_NUMBERS.value[i] === undefined) {
-               LOCAL_NUMBERS.push(currentNumber);
-               break
-          } else {
-               currentNumber += $USER_NUMBERS.value[i];
-          };
-     };
-     const INTERNATIONAL_NUMBERS = [];
-     for (let i = 0; i < LOCAL_NUMBERS.length; i++) {
-          INTERNATIONAL_NUMBERS.push($INTERNATIONAL_CODE.value + LOCAL_NUMBERS[i]);
-     };
-     const LINKS = [];
-     for (let i = 0; i < INTERNATIONAL_NUMBERS.length; i++) {
-          let baseUrl = new URL('https://api.whatsapp.com/send/');
-          baseUrl.searchParams.append('phone', INTERNATIONAL_NUMBERS[i]);
-          baseUrl.searchParams.append('text', $MESSAGE.value);
-          LINKS.push(baseUrl.href);
+function getInternationalPhoneNumbersArray(localPhoneNumbersArray, internationalCode) {
+     const INTERNATIONAL_NUMBERS_ARRAY = [];
+     for (const LOCAL_NUMBER of localPhoneNumbersArray) {
+          const INTERNATIONAL_NUMBER = internationalCode + LOCAL_NUMBER;
+          INTERNATIONAL_NUMBERS_ARRAY.push(INTERNATIONAL_NUMBER);
      }
-     for (let i = 0; i < LINKS.length; i++) {
-          let anchor = document.createElement('a'); 
-          anchor.setAttribute('target', '_blank');
-          anchor.innerHTML = `Link for number ${INTERNATIONAL_NUMBERS[i]} <br>`
-          $LINKS_LIST.appendChild(anchor)
-               .setAttribute('href', LINKS[i])
+     return INTERNATIONAL_NUMBERS_ARRAY;
+}
+
+function getWaitingRoomLinksArray(internationalPhoneNumbersArray, text) {
+     const LINKS_ARRAY = [];
+     for (const PHONE_NUMBER of internationalPhoneNumbersArray) {
+          let baseUrl = new URL('http://127.0.0.1:5500/waiting-room.html');
+          baseUrl.searchParams.append('phone', PHONE_NUMBER);
+          baseUrl.searchParams.append('text', text);
+          LINKS_ARRAY.push(baseUrl.href);
      }
+     return LINKS_ARRAY;
+}
+
+function openAllDocumentLinks() {
+     const $DOCUMENT_ANCHORS_ARRAY = document.getElementsByTagName('a');
+     for (const ANCHOR of $DOCUMENT_ANCHORS_ARRAY) {
+          const ANCHOR_LINK = ANCHOR.href;  
+          window.open(ANCHOR_LINK);
+     }
+}
+
+function removeAllChildrenFromElement(htmlElementId) {
+     const $ELEMENT = document.getElementById(htmlElementId);
+     const CHILDREN_ARRAY = Array.from($ELEMENT.children);
+     for (const CHILD of CHILDREN_ARRAY) {
+          $ELEMENT.removeChild(CHILD);
+     }
+}
+
+function appendWaitingRoomLinksToElement(htmlElementId, waitingRoomLinksArray, internationalPhoneNumbersArray) {
+     const $PARENT_ELEMENT = document.getElementById(htmlElementId);
+     const UL_ELEMENT = document.createElement('ul');
+     UL_ELEMENT.style.listStyleType = 'none';
+     for (let i = 0; i < waitingRoomLinksArray.length; i++) {
+          const LI_ELEMENT = document.createElement('li');
+          const A_ELEMENT = document.createElement('a');
+          A_ELEMENT.setAttribute('target', '_blank');
+          A_ELEMENT.setAttribute('href', waitingRoomLinksArray[i]);
+          A_ELEMENT.innerHTML = `Link for number ${internationalPhoneNumbersArray[i]}`;
+          LI_ELEMENT.appendChild(A_ELEMENT);
+          UL_ELEMENT.appendChild(LI_ELEMENT);
+     }
+     $PARENT_ELEMENT.appendChild(UL_ELEMENT);
+}
+
+window.addEventListener('load', () => {
+     const $GENERATE_LINKS_BUTTON = document.getElementById('generate-links-button');
+     $GENERATE_LINKS_BUTTON.addEventListener('click', () => {
+          const $LOCAL_NUMBERS_TEXTAREA = document.getElementById('local-numbers');
+          const $INTERNATIONAL_CODE = document.getElementById('international-code').value;
+          const $MESSAGE = document.getElementById('message').value;
+          const LOCAL_NUMBERS_ARRAY = getLocalPhoneNumbersArray($LOCAL_NUMBERS_TEXTAREA);
+          const INTERNATIONAL_NUMBERS_ARRAY = getInternationalPhoneNumbersArray(LOCAL_NUMBERS_ARRAY, $INTERNATIONAL_CODE);
+          const WAITING_ROOM_LINKS_ARRAY = getWaitingRoomLinksArray(INTERNATIONAL_NUMBERS_ARRAY, $MESSAGE);
+          appendWaitingRoomLinksToElement('links-section', WAITING_ROOM_LINKS_ARRAY, INTERNATIONAL_NUMBERS_ARRAY);
+     });
 });
