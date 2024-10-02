@@ -28,7 +28,7 @@ function getInternationalPhoneNumbersArray(localPhoneNumbersArray, international
 function getWaitingRoomLinksArray(internationalPhoneNumbersArray, text) {
      const LINKS_ARRAY = [];
      for (const PHONE_NUMBER of internationalPhoneNumbersArray) {
-          let baseUrl = new URL('http://127.0.0.1:5500/waiting-room.html');
+          let baseUrl = new URL('/waiting-room.html', document.URL);
           baseUrl.searchParams.append('phone', PHONE_NUMBER);
           baseUrl.searchParams.append('text', text);
           LINKS_ARRAY.push(baseUrl.href);
@@ -37,7 +37,7 @@ function getWaitingRoomLinksArray(internationalPhoneNumbersArray, text) {
 }
 
 function openAllDocumentLinks() {
-     const $DOCUMENT_ANCHORS_ARRAY = document.getElementsByTagName('a');
+     const $DOCUMENT_ANCHORS_ARRAY = Array.from(document.getElementsByTagName('a'));
      for (const ANCHOR of $DOCUMENT_ANCHORS_ARRAY) {
           const ANCHOR_LINK = ANCHOR.href;  
           window.open(ANCHOR_LINK);
