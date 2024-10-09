@@ -9,12 +9,7 @@ export class PhoneNumbersProcessor {
                .filter(number => number.trim() !== '');
      }
      get internationalNumbersArray() {
-          const internationalPhoneNumbersArray = [];
-          for (const localNumber of this.localNumbersArray) {
-               const internationalNumber = this.countryCode + localNumber;
-               internationalPhoneNumbersArray.push(internationalNumber);
-          }
-          return internationalPhoneNumbersArray;
+          return this.localNumbersArray.map(localNumber => this.countryCode + localNumber);
      }
 }
 
