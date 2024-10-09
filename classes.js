@@ -4,20 +4,9 @@ export class PhoneNumbersProcessor {
           this.countryCode = countryCodeInput.value;
      }
      get localNumbersArray() {
-          const localNumbersArray = [];
-          let currentLocalNumber = '';
-          for (const char of this.localPhoneNumbersTextarea) {
-               if (char === '\n' || char === ' ' && currentLocalNumber) {
-                    localNumbersArray.push(currentLocalNumber);
-                    currentLocalNumber = '';
-               } else if (char) {
-                    currentLocalNumber += char;
-               }
-          }
-          if (currentLocalNumber) {
-               localNumbersArray.push(currentLocalNumber);
-          }
-          return localNumbersArray;
+          return this.localPhoneNumbersTextarea
+               .split(/\s+/)
+               .filter(number => number.trim() !== '');
      }
      get internationalNumbersArray() {
           const internationalPhoneNumbersArray = [];
