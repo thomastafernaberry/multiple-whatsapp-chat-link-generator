@@ -33,9 +33,7 @@ export class WaitingRoomManager {
 export class DOMElementsManager {
      openAllLinks(linksClassName) {
           const links = Array.from(document.getElementsByClassName(linksClassName));
-          links.forEach(link => {
-               window.open(link);
-          });
+          links.forEach(link => window.open(link));
      }
      removeAllChildrenFromElement(elementId) {
           const element = document.getElementById(elementId);
@@ -65,15 +63,13 @@ export class DOMElementsManager {
 
 export class QueryAccesor {
      constructor(url) {
-          this.url = url;
+          this.url = new URL(url);
      }
      get phoneValue() {
-          const url = new URL(this.url);
-          return url.searchParams.get('phone');
+          return this.url.searchParams.get('phone');
      }
      get textValue() {
-          const url = new URL(this.url);
-          return url.searchParams.get('text');
+          return this.url.searchParams.get('text');
      }
 }
 
